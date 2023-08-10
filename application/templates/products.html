@@ -1,5 +1,21 @@
 {% extends 'navbar.html' %}
 
 {% block content %}
+<table class="table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>£ {{ product.price }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
 {% endblock %}
