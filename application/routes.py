@@ -1,7 +1,9 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, session
 from application import app, db
-from application.models import Product, Category, User, Order, OrderItem, Cart
-from application.forms import SignUpForm
+from application.models import Product, Category, User, Order, OrderItem, Cart, CartItem, WishList, CartDisplay
+from application.forms import SignUpForm, LoginForm
+from flask_bcrypt import Bcrypt
+from application import bcrypt
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -33,17 +35,51 @@ def contact():
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
-    return render_template('/cart.html', title='Cart')
+    # if session id exists, find cart
+    if 'user_id' in session:
+        cart = Cart.query.filter_by(user_id=session['user_id']).first()
+        cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+        cart_products = []
+        for item in cart_items:
+            product = Product.query.get(item.product_id)
+            item = CartDisplay(product.id, product.name, product.price, item.quantity, product.image)
+            cart_products.append(item)
+        return render_template('/cart.html', title='Cart', products=cart_products)
+    else:
+        return redirect(url_for('login'))
 
-@app.route('/cart/add/<int:id>', methods=['GET', 'POST'])
+@app.route('/cart/update/<int:id>/<int:quantity>', methods=['GET', 'POST'])
+def update_cart(id, quantity):
+    if 'user_id' in session:
+        # find users cart
+        cart = Cart.query.filter_by(user_id=session['user_id']).first()
+        # add product to cart
+        cart.set_quantity(id, quantity)
+        return redirect(url_for('cart'))
+
+@app.route('/add/<int:id>', methods=['GET', 'POST'])
 def add_to_cart(id):
-    # find users cart
-    current_user = User.query.get(1)
-    carts = Cart.query.filter_by(user_id=current_user.id).all()
-    # if no cart, create one
-    # add product to cart
-    # if product already in cart, increase quantity
+    if 'user_id' in session:
+        # find users cart
+        cart = Cart.query.filter_by(user_id=session['user_id']).first()
+        # add product to cart
+        cart.add_item(id)
+        return redirect(url_for('cart'))
 
+@app.route('/cart/remove/<int:id>', methods=['GET', 'POST'])
+def remove_from_cart(id):
+    # find users cart
+    cart = Cart.query.filter_by(user_id=session['user_id']).first()
+    # remove product from cart
+    cart.remove_item(id)
+    return redirect(url_for('cart'))
+
+@app.route('/empty-cart', methods=['GET', 'POST'])
+def empty_cart():
+    # find users cart
+    cart = Cart.query.filter_by(user_id=session['user_id']).first()
+    # remove product from cart
+    cart.empty_cart()
     return redirect(url_for('cart'))
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -53,12 +89,12 @@ def signup():
         if form.validate_on_submit():
             print('validated')
             user = User(
-                name=form.name.data,
-                email=form.email.data,
-                password=form.password.data,
-                address=form.address.data,
-                postcode=form.postcode.data,
-                phone=form.phone.data)
+                name = form.name.data,
+                email = form.email.data,
+                password = bcrypt.generate_password_hash(form.password.data),
+                address = form.address.data,
+                postcode = form.postcode.data,
+                phone = form.phone.data)
 
             db.session.add(user)
             db.session.commit()
@@ -66,3 +102,37 @@ def signup():
         else:
             print('not validated')
     return render_template('/signup.html', title='Sign Up', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if request.method == 'POST':
+        print('post')
+        if form.validate_on_submit():
+            print('validated')
+            user = User.query.filter_by(email=form.email.data).first()
+            if user and bcrypt.check_password_hash(user.password, form.password.data):
+                print('user found')
+                # create session variable for user_id
+                session['user_id'] = user.id
+                # check if user has a cart
+                cart = Cart.query.filter_by(user_id=user.id).first()
+                if cart:
+                    print('cart found')
+                else:
+                    print('cart not found')
+                    cart = Cart(user_id=user.id)
+                    db.session.add(cart)
+                    db.session.commit()
+                return redirect(url_for('home'))
+            else:
+                print('user not found')
+        else:
+            print('not validated')
+    return render_template('/login.html', title='Login', form=form)
+
+@app.route('/logout')
+def clear_variable():
+    session.pop('user_id', None)  # Remove 'user_id' from session
+    print("Session variable cleared!")
+    return redirect(url_for('home'))

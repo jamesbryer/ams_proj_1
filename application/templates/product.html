@@ -12,7 +12,7 @@
             <p> Category: {{ category.name }}</p>
             <p>£ {{ product.price }}</p>
 
-            <form action="/cart/add" method="POST">
+            <form action="/add/{{ product.id }}" method="POST">
                 <input type="hidden" name="product_id" value="{{ product.id }}">
                 <input type="submit" value="Add to cart" class="btn btn-primary">
             </form>

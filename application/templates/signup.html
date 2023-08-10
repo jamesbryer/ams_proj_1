@@ -1,25 +1,42 @@
 {% extends 'navbar.html' %}
 
 {% block content %}
-    <div class="form">
-        <form action="" method="POST">
-            {{ form.hidden_tag() }}
-            {{ form.name.label }} {{ form.name }}
-            <br>
-            {{ form.email.label }} {{ form.email }}
-            <br>
-            {{ form.address.label }} {{ form.address }}
-            <br>
-            {{ form.postcode.label }} {{ form.postcode }}
-            <br>
-            {{ form.phone.label }} {{ form.phone }}
-            <br>
-            {{ form.password.label }} {{ form.password }}
-            <br>
-            {{ form.confirm_password.label }} {{ form.confirm_password }}
-            <br>
-            {{ form.submit() }}
-            
-        </form>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="form" action="" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.address.label(class="form-label") }}
+                        {{ form.address(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.postcode.label(class="form-label") }}
+                        {{ form.postcode(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {{ form.confirm_password(class="form-control") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}

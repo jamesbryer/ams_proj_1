@@ -70,7 +70,7 @@ class OrderItem(db.Model):
 
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return ''.join([
@@ -78,8 +78,42 @@ class Cart(db.Model):
             'Product ID: ', str(self.product_id)
         ])
     
+    def set_quantity(self, product_id, quantity):
+        cart_item = CartItem.query.filter_by(product_id=product_id, cart_id=self.id).first()
+        if cart_item:
+            if quantity > 0:
+                cart_item.quantity = quantity
+                db.session.commit()
+            else:
+                db.session.delete(cart_item)
+                db.session.commit()
+    
+    def add_item(self, product_id):
+        cart_item = CartItem.query.filter_by(product_id=product_id, cart_id=self.id).first()
+        if cart_item:
+            cart_item.quantity += 1
+            db.session.commit()
+        else:
+            new_cart_item = CartItem(product_id=product_id, quantity=1, cart_id=self.id)
+            db.session.add(new_cart_item)
+            db.session.commit()
+    
+    def remove_item(self, product_id):
+        cart_item = CartItem.query.filter_by(product_id=product_id, cart_id=self.id).first()
+        if cart_item:
+            db.session.delete(cart_item)
+            db.session.commit()
+
+    def empty_cart(self):
+        cart_items = CartItem.query.filter_by(cart_id=self.id).all()
+        for item in cart_items:
+            db.session.delete(item)
+            db.session.commit()
+        
+    
 class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'), nullable=False)
 
@@ -89,6 +123,14 @@ class CartItem(db.Model):
             'Cart ID: ', str(self.cart_id), '\r\n', str(self.quantity)
         ])
     
+class CartDisplay():
+    def __init__(self, product_id, name, price, quantity, image) -> None:
+        self.id = product_id
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+        self.image = image
+
 class WishList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
@@ -116,3 +158,16 @@ class BannedChars:
         for char in banned_chars:
             if char in field.data:
                 raise ValidationError(self.message)
+            
+class PaymentDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    card_number = db.Column(db.String(16), nullable=False)
+    expiry_date = db.Column(db.String(5), nullable=False)
+    cvv = db.Column(db.String(3), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return ''.join([
+            'PaymentDetails ID: ', str(self.id), '\r\n',
+            'User ID: ', str(self.user_id), '\r\n', str(self.card_number)
+        ])

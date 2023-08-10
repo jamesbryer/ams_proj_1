@@ -2,4 +2,53 @@
 
 {% block content %}
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for item in products %}
+            <td>{{ item.name }}</td>
+            <td>£ {{ item.price }}</td>
+            <td>
+                <form id="update-form" method="POST">
+                    <input type="hidden" name="product_id" value="{{ item.id }}">
+                    <input type="number" name="quantity" value="{{ item.quantity }}">
+                    <input type="submit" value="Update" class="btn btn-primary">
+                </form>
+            </td>
+            <td>
+                <form action="/cart/remove/{{ item.id }}" method="POST">
+                    <input type="hidden" name="product_id" value="{{ item.id }}">
+                    <input type="submit" value="Remove" class="btn btn-primary">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </thead>
+
+</table>
+<script>
+    const updateForm = document.getElementById('update-form');
+    const quantityInput = updateForm.querySelector('input[name="quantity"]');
+    // THE EVENT LISTENER IS ONLY ON THE FIRST BUTTON!!!
+    updateForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const quantity = quantityInput.value;
+        console.log(`The quantity is ${quantity}`);
+        const productId = updateForm.querySelector('input[name="product_id"]').value;
+        
+        const newAction = `/cart/update/${productId}/${quantity}`;
+        updateForm.action = newAction;
+        
+        // Submit the form
+        updateForm.submit();
+    });
+</script>
+
 {% endblock %}
