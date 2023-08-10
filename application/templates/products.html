@@ -6,6 +6,8 @@
       <tr>
         <th>Product</th>
         <th>Price</th>
+        <th>Description</th>
+        <th>Image</th>
       </tr>
     </thead>
     <tbody>
@@ -14,6 +16,8 @@
       <tr>
         <td><a href="{{ url_for('product', id=product.id) }}">{{ product.name }}</a></td>
         <td>£ {{ product.price }}</td>
+        <td> {{ product.description }}</td>
+        <td><img class="product-image"src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" class="img-fluid"></td>
       </tr>
       {% endfor %}
     </tbody>

@@ -1,0 +1,25 @@
+{% extends 'navbar.html' %}
+
+{% block content %}
+    <div class="form">
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.name.label }} {{ form.name }}
+            <br>
+            {{ form.email.label }} {{ form.email }}
+            <br>
+            {{ form.address.label }} {{ form.address }}
+            <br>
+            {{ form.postcode.label }} {{ form.postcode }}
+            <br>
+            {{ form.phone.label }} {{ form.phone }}
+            <br>
+            {{ form.password.label }} {{ form.password }}
+            <br>
+            {{ form.confirm_password.label }} {{ form.confirm_password }}
+            <br>
+            {{ form.submit() }}
+            
+        </form>
+    </div>
+{% endblock %}

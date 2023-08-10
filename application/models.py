@@ -68,5 +68,51 @@ class OrderItem(db.Model):
             'Order ID: ', str(self.order_id), '\r\n', str(self.quantity)
         ])
 
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 
+    def __repr__(self):
+        return ''.join([
+            'Cart ID: ', str(self.id), '\r\n',
+            'Product ID: ', str(self.product_id)
+        ])
     
+class CartItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'), nullable=False)
+
+    def __repr__(self):
+        return ''.join([
+            'CartItem ID: ', str(self.id), '\r\n',
+            'Cart ID: ', str(self.cart_id), '\r\n', str(self.quantity)
+        ])
+    
+class WishList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+
+    def __repr__(self):
+        return ''.join([
+            'WishList ID: ', str(self.id), '\r\n',
+            'Product ID: ', str(self.product_id)
+        ])
+    
+class CheckAdmin:
+    def __init__(self, message=None):
+        self.message = message
+
+    def __call__(self, form, field):
+        if field.data.lower() == 'admin':
+            raise ValidationError(self.message)
+
+class BannedChars:
+    def __init__(self, message=None) -> None:
+        self.message = message
+
+    def __call__(self, form, field):
+        banned_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')']
+        for char in banned_chars:
+            if char in field.data:
+                raise ValidationError(self.message)
