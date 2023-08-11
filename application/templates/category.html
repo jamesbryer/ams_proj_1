@@ -1,9 +1,21 @@
 {% extends 'navbar.html' %}
 
 {% block content %}
+<form class="form-inline">
+    <div class="form-group">
+        <label for="category" class="mr-2">Select Category:</label>
+        <select class="form-control" name="category" id="category">
+            <option value="0">All</option>
+            {% for category in categories %}
+            <option value="{{ category.category_id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>
+
 {% for category in categories%}
-    <h2>{{ category.name }}</h2>
-    <table class="table">
+    <h2 id="{{ category.category_id }}">{{ category.name }}</h2>
+    <table class="table" id="{{ category.category_id }}">
         <thead>
             <tr>
                 <th>Product</th>
@@ -26,4 +38,32 @@
     {% endfor %}
 </table>
 {% endfor %}
+<script>
+    categorySelect = document.querySelector('#category');
+    categorySelect.addEventListener('change', (event) => {
+        console.log(event.target.value);
+        if (event.target.value == 0) {
+            window.location.href = '/category';
+        } else {
+            // hide all table elements except the one with the id of the selected category
+            const tables = document.querySelectorAll('table');
+            const h2s = document.querySelectorAll('h2');
+            tables.forEach(table => {
+                if (table.id == event.target.value) {
+                    table.style.display = 'table';
+
+                } else {
+                    table.style.display = 'none';
+                }
+            });
+            h2s.forEach(h2 => {
+                if (h2.id == event.target.value) {
+                    h2.style.display = 'block';
+                } else {
+                    h2.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
