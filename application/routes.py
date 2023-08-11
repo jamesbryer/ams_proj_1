@@ -174,9 +174,9 @@ def checkout():
                 address = Address.query.filter_by(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"]).first()
             else:
                 address = Address(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"], town_city=request.form["town_city"], postcode=request.form["postcode"])
-                cart = Cart.query.filter_by(user_id=session['user_id']).first()
-                db.session.add(cart)
-                db.session.commit()
+            cart = Cart.query.filter_by(user_id=session['user_id']).first()
+            db.session.add(cart)
+            db.session.commit()
             cart.delivery_address_id = address.id
             db.session.add(address)
             db.session.commit()
