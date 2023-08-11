@@ -24,7 +24,15 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
     submit = SubmitField('Login')
 
+class AddressForm(FlaskForm):
+    house_name_num = StringField('House Name/Number', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
+    street = StringField('Street', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
+    town_city = StringField('Town/City', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
+    postcode = StringField('Postcode', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
+    submit = SubmitField('Update')
+
 class PaymentForm(FlaskForm):
+    cardholder_name = StringField('Cardholder Name', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
     card_number = StringField('Card Number', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
     expiry_date = StringField('Expiry Date', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
     security_code = StringField('Security Code', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])

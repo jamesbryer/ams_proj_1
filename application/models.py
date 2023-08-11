@@ -34,8 +34,6 @@ class User(db.Model):
     name = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
-    address = db.Column(db.String(100), nullable=False)
-    postcode = db.Column(db.String(10), nullable=False)
     phone = db.Column(db.String(15), nullable=False)
     orders = db.relationship('Orders', backref='customer', lazy=True)
 
@@ -47,6 +45,7 @@ class User(db.Model):
     
 class PaymentDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    cardholder_name = db.Column(db.String(30), nullable=False)
     card_number = db.Column(db.String(16), nullable=False)
     expiry_date = db.Column(db.String(5), nullable=False)
     cvv = db.Column(db.String(3), nullable=False)
@@ -56,6 +55,21 @@ class PaymentDetails(db.Model):
         return ''.join([
             'PaymentDetails ID: ', str(self.id), '\r\n',
             'User ID: ', str(self.user_id), '\r\n', str(self.card_number)
+        ])
+    
+class Address(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    house_name_num = db.Column(db.String(30), nullable=False)
+    street = db.Column(db.String(30), nullable=False)
+    town_city = db.Column(db.String(30), nullable=False)
+    postcode = db.Column(db.String(10), nullable=False)
+    user = db.relationship('User', backref='address', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return ''.join([
+            'Address ID: ', str(self.id), '\r\n',
+            'User ID: ', str(self.user_id), '\r\n', str(self.address)
         ])
 
 class Orders(db.Model):
@@ -87,6 +101,8 @@ class OrderItem(db.Model):
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    delivery_address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=True)
+    address = db.relationship('Address', backref='card', foreign_keys=[delivery_address_id])
 
     def __repr__(self):
         return ''.join([
@@ -147,15 +163,7 @@ class CartDisplay():
         self.quantity = quantity
         self.image = image
 
-class WishList(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 
-    def __repr__(self):
-        return ''.join([
-            'WishList ID: ', str(self.id), '\r\n',
-            'Product ID: ', str(self.product_id)
-        ])
     
 class CheckAdmin:
     def __init__(self, message=None):

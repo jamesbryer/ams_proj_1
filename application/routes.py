@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, session
 from application import app, db
-from application.models import Product, Category, User, Orders, OrderItem, Cart, CartItem, WishList, CartDisplay, PaymentDetails
-from application.forms import SignUpForm, LoginForm, PaymentForm
+from application.models import Product, Category, User, Orders, OrderItem, Cart, CartItem, CartDisplay, PaymentDetails, Address
+from application.forms import SignUpForm, LoginForm, PaymentForm, AddressForm
 from flask_bcrypt import Bcrypt
 from application import bcrypt
 from datetime import datetime
@@ -140,8 +140,56 @@ def clear_variable():
     print("Session variable cleared!")
     return redirect(url_for('home'))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+    form = AddressForm()
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    # if method is post
+    if request.method == 'POST':
+        # if form is valid
+        if form.validate_on_submit():
+            # check if address already exists
+            if Address.query.filter_by(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"]).first():
+                address = Address.query.filter_by(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"]).first()
+            else:
+                address = Address(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"], town_city=request.form["town_city"], postcode=request.form["postcode"])
+                cart = Cart.query.filter_by(user_id=session['user_id']).first()
+                db.session.add(cart)
+                db.session.commit()
+            cart.delivery_address_id = address.id
+            db.session.add(address)
+            db.session.commit()
+            return redirect(url_for('home'))
+        
+
+    cart = Cart.query.filter_by(user_id=session['user_id']).first()
+    cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+    addresses = Address.query.filter_by(user_id=session['user_id']).all()
+    return render_template('/checkout.html', title='Checkout', addresses=addresses, cart_items=cart_items, form=form)
+
+@app.route('/complete-order', methods=['GET', 'POST'])
+def complete_order():
     if 'user_id' in session:
         # if form has been submitted
         if request.method == 'POST':
@@ -152,6 +200,7 @@ def checkout():
             else:
                 payment_details = PaymentDetails(
                     user_id = session['user_id'],
+                    cardholder_name = request.form['cardholder_name'],
                     card_number = request.form['card_number'],
                     expiry_date = request.form['expiry_date'],
                     cvv = request.form['security_code'])
@@ -188,7 +237,7 @@ def checkout():
             product = Product.query.get(item.product_id)
             item = CartDisplay(product.id, product.name, product.price, item.quantity, product.image)
             cart_products.append(item)
-        return render_template('/checkout.html', title='Checkout', products=cart_products, form=payment_form, payment_details=payment_details)
+        return render_template('/complete-order.html', title='Checkout', products=cart_products, form=payment_form, payment_details=payment_details)
     
     
     else:
