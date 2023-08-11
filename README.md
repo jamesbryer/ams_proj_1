@@ -43,13 +43,11 @@ python3 app.py
 
 - [x] A kanban board detailing the tasks for the project
 - [x] A git repository
-
 - [x] A home page
 - [x] An about page
 - [x] A products page
 - [x] A category page
 - [x] A cart page
 - [x] A checkout page
-
 
 ### 4. Acceptance Criteria

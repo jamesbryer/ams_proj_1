@@ -2,6 +2,7 @@ from application import db
 from wtforms.validators import ValidationError
 from datetime import datetime
 
+
 class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
@@ -36,7 +37,7 @@ class User(db.Model):
     address = db.Column(db.String(100), nullable=False)
     postcode = db.Column(db.String(10), nullable=False)
     phone = db.Column(db.String(15), nullable=False)
-    orders = db.relationship('Order', backref='customer', lazy=True)
+    orders = db.relationship('Orders', backref='customer', lazy=True)
 
     def __repr__(self):
         return ''.join([
@@ -44,11 +45,25 @@ class User(db.Model):
             'Email: ', self.email, '\r\n', self.name
         ])
     
-class Order(db.Model):
+class PaymentDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    card_number = db.Column(db.String(16), nullable=False)
+    expiry_date = db.Column(db.String(5), nullable=False)
+    cvv = db.Column(db.String(3), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return ''.join([
+            'PaymentDetails ID: ', str(self.id), '\r\n',
+            'User ID: ', str(self.user_id), '\r\n', str(self.card_number)
+        ])
+
+class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    order_items = db.relationship('OrderItem', backref='order', lazy=True)
+    PaymentDetails = db.relationship('PaymentDetails', backref='order', lazy=True)
+    payment_details_id = db.Column(db.Integer, db.ForeignKey('payment_details.id'), nullable=False)
 
     def __repr__(self):
         return ''.join([
@@ -60,7 +75,8 @@ class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    order = db.relationship('Orders', backref='order', lazy=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
 
     def __repr__(self):
         return ''.join([
@@ -159,15 +175,4 @@ class BannedChars:
             if char in field.data:
                 raise ValidationError(self.message)
             
-class PaymentDetails(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    card_number = db.Column(db.String(16), nullable=False)
-    expiry_date = db.Column(db.String(5), nullable=False)
-    cvv = db.Column(db.String(3), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __repr__(self):
-        return ''.join([
-            'PaymentDetails ID: ', str(self.id), '\r\n',
-            'User ID: ', str(self.user_id), '\r\n', str(self.card_number)
-        ])

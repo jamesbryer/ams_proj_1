@@ -8,6 +8,8 @@
             <th>Product</th>
             <th>Price</th>
             <th>Quantity</th>
+            <th>Total</th>
+            <th>Remove</th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +24,7 @@
                     <input type="submit" value="Update" class="btn btn-primary">
                 </form>
             </td>
+            <td id="product_total">£ {{ item.price * item.quantity }}</td>
             <td>
                 <form action="/cart/remove/{{ item.id }}" method="POST">
                     <input type="hidden" name="product_id" value="{{ item.id }}">
@@ -30,33 +33,47 @@
             </td>
         </tr>
         {% endfor %}
-        </thead>
-
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3"><b>Cart Total</b></td>
+            <td><b id="total_amount"></b></td>
+            <td></td>
+        </tr>
+    </tfoot>
 </table>
+<a href="/checkout"><button class="btn btn-primary">Checkout</button></a>
 <script>
 
-    
-    // if there is an item in the form
-    if (document.querySelector('.update-form')){
 
-    const updateForms = document.querySelectorAll('.update-form');
-    updateForms.forEach(form => {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            
-            const quantityInput = form.querySelector('input[name="quantity"]');
-            const quantity = quantityInput.value;
-            
-            const productIdInput = form.querySelector('input[name="product_id"]');
-            const productId = productIdInput.value;
-            
-            const newAction = `/cart/update/${productId}/${quantity}`;
-            form.action = newAction;
-            // Submit the form
-            form.submit();
+    // if there is an item in the form
+    if (document.querySelector('.update-form')) {
+
+        const updateForms = document.querySelectorAll('.update-form');
+        updateForms.forEach(form => {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const quantityInput = form.querySelector('input[name="quantity"]');
+                const quantity = quantityInput.value;
+
+                const productIdInput = form.querySelector('input[name="product_id"]');
+                const productId = productIdInput.value;
+
+                const newAction = `/cart/update/${productId}/${quantity}`;
+                form.action = newAction;
+                // Submit the form
+                form.submit();
+            });
         });
-    });
-}
+        let total_amount = document.querySelector('#total_amount');
+        let total = 0;
+        let prices = document.querySelectorAll('#product_total');
+        prices.forEach(price => {
+            total += parseInt(price.innerText.split('£ ')[1]);
+        });
+        total_amount.innerText = `£ ${total}`;
+    }
 
 
 </script>

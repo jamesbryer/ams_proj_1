@@ -23,3 +23,9 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
     submit = SubmitField('Login')
+
+class PaymentForm(FlaskForm):
+    card_number = StringField('Card Number', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
+    expiry_date = StringField('Expiry Date', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
+    security_code = StringField('Security Code', validators=[DataRequired(), Length(min=2, max=30), BannedChars()])
+    submit = SubmitField('Pay')

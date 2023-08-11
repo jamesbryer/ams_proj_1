@@ -1,6 +1,6 @@
 from app import app
 from application import db, bcrypt
-from application.models import Product, Category, User, Order, OrderItem, Cart, CartItem, WishList, CartDisplay
+from application.models import Product, Category, User, Orders, OrderItem, Cart, CartItem, WishList, CartDisplay, PaymentDetails
 from datetime import datetime
 
 
