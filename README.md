@@ -25,6 +25,7 @@ python3 app.py
 - [x] About page
 - [x] Category page
 - [x] Products page
+- [x] Orders page where you can see all orders filtered by user id
 
 ### 2. User Stories
 
@@ -38,4 +39,17 @@ python3 app.py
 - [x] As a user, I can see the total price of the products in my cart
 - [x] As a user, I can navigate between pages easily
 
-### 3. Acceptance Criteria
+### 3. Minimum Viable Product
+
+- [x] A kanban board detailing the tasks for the project
+- [x] A git repository
+
+- [x] A home page
+- [x] An about page
+- [x] A products page
+- [x] A category page
+- [x] A cart page
+- [x] A checkout page
+
+
+### 4. Acceptance Criteria

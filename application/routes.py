@@ -65,6 +65,8 @@ def add_to_cart(id):
         # add product to cart
         cart.add_item(id)
         return redirect(url_for('cart'))
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/cart/remove/<int:id>', methods=['GET', 'POST'])
 def remove_from_cart(id):

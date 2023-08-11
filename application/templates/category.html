@@ -1,7 +1,7 @@
 {% extends 'navbar.html' %}
 
 {% block content %}
-<form class="form-inline">
+<form class="form-inline" style="padding-bottom: 10px;">
     <div class="form-group">
         <label for="category" class="mr-2">Select Category:</label>
         <select class="form-control" name="category" id="category">
@@ -39,7 +39,7 @@
 </table>
 {% endfor %}
 <script>
-    categorySelect = document.querySelector('#category');
+    let categorySelect = document.querySelector('#category');
     categorySelect.addEventListener('change', (event) => {
         console.log(event.target.value);
         if (event.target.value == 0) {
