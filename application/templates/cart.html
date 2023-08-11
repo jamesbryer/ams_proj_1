@@ -16,7 +16,7 @@
             <td>{{ item.name }}</td>
             <td>£ {{ item.price }}</td>
             <td>
-                <form id="update-form" method="POST">
+                <form class="update-form" method="POST">
                     <input type="hidden" name="product_id" value="{{ item.id }}">
                     <input type="number" name="quantity" value="{{ item.quantity }}">
                     <input type="submit" value="Update" class="btn btn-primary">
@@ -30,25 +30,35 @@
             </td>
         </tr>
         {% endfor %}
-    </thead>
+        </thead>
 
 </table>
 <script>
-    const updateForm = document.getElementById('update-form');
-    const quantityInput = updateForm.querySelector('input[name="quantity"]');
-    // THE EVENT LISTENER IS ONLY ON THE FIRST BUTTON!!!
-    updateForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const quantity = quantityInput.value;
-        console.log(`The quantity is ${quantity}`);
-        const productId = updateForm.querySelector('input[name="product_id"]').value;
-        
-        const newAction = `/cart/update/${productId}/${quantity}`;
-        updateForm.action = newAction;
-        
-        // Submit the form
-        updateForm.submit();
+
+    
+    // if there is an item in the form
+    if (document.querySelector('.update-form')){
+
+    const updateForms = document.querySelectorAll('.update-form');
+    updateForms.forEach(form => {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            const quantityInput = form.querySelector('input[name="quantity"]');
+            const quantity = quantityInput.value;
+            
+            const productIdInput = form.querySelector('input[name="product_id"]');
+            const productId = productIdInput.value;
+            
+            const newAction = `/cart/update/${productId}/${quantity}`;
+            form.action = newAction;
+            // Submit the form
+            form.submit();
+        });
     });
+}
+
+
 </script>
 
 {% endblock %}
