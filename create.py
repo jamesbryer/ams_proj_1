@@ -1,6 +1,6 @@
 from app import app
 from application import db, bcrypt
-from application.models import Product, Category, User, Orders, OrderItem, Cart, CartItem, WishList, CartDisplay, PaymentDetails
+from application.models import Product, Category, User, Orders, OrderItem, Cart, CartItem, CartDisplay, PaymentDetails
 from datetime import datetime
 
 
@@ -53,11 +53,11 @@ with app.app_context():
     db.session.add(tv_5)
     db.session.commit()
 
-    user_james = User(name='James', password=bcrypt.generate_password_hash('password'), email="james@qa.com", address="1 James Street", postcode="JAM 3S", phone="01234567890")
+    user_james = User(name='James', password=bcrypt.generate_password_hash('password'), email="james@qa.com", phone="01234567890")
     
-    user_jasmine = User(name='Jasmine', password=bcrypt.generate_password_hash('password'), email="jasmine@qa.com", address="1 Jasmine Street", postcode="JAS 3M", phone="01234567890")
+    user_jasmine = User(name='Jasmine', password=bcrypt.generate_password_hash('password'), email="jasmine@qa.com", phone="01234567890")
     
-    user_john = User(name='John', password=bcrypt.generate_password_hash('password'), email="john@qa.com'", address="1 John Street", postcode="JOH 3N", phone="01234567890")
+    user_john = User(name='John', password=bcrypt.generate_password_hash('password'), email="john@qa.com'", phone="01234567890")
     
     db.session.add(user_james)
     db.session.add(user_jasmine)
