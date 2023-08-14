@@ -183,17 +183,22 @@ def checkout():
 
 @app.route('/complete-order', methods=['GET', 'POST'])
 def complete_order():
+
+    # find users cart
     cart = Cart.query.filter_by(user_id=session['user_id']).first()
     cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
-    # if there are items in the cart and user is logged in
+
+    # if there are items in the cart and user is logged in - else redirect to home
     if 'user_id' in session and cart_items:
         # if form has been submitted
         if request.method == 'POST':
             print('post')
             # check if payment details already exist
             if PaymentDetails.query.filter_by(user_id=session['user_id'], card_number=request.form['card_number']).first():
+                # retrieve payment details record
                 payment_details = PaymentDetails.query.filter_by(user_id=session['user_id'], card_number=request.form['card_number']).first()
             else:
+                # create payment details record
                 payment_details = PaymentDetails(
                     user_id = session['user_id'],
                     cardholder_name = request.form['cardholder_name'],
@@ -219,12 +224,10 @@ def complete_order():
 
             db.session.commit()
             cart.empty_cart()
-            return redirect(url_for('home'))
+            # get the order id from the database
+            order_id = Orders.query.filter_by(user_id=session['user_id'], payment_details_id=payment_details_id).first().id
+            return redirect("/confirmation/" + str(order_id))
         
-
-        # # find users cart
-        # cart = Cart.query.filter_by(user_id=session['user_id']).first()
-        # cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
 
         # if method isn't post - load page
         cart_products = []
@@ -239,6 +242,16 @@ def complete_order():
             cart_products.append(item)
         return render_template('/complete-order.html', title='Checkout', products=cart_products, form=payment_form, payment_details=payment_details)
     
-    
     else:
         return redirect(url_for('home'))
+    
+@app.route('/confirmation/<int:order_id>')
+def confirmation(order_id):
+    order = Orders.query.get(order_id)
+    order_items = OrderItem.query.filter_by(order_id=order_id).all()
+    products = []
+    for item in order_items:
+        product = Product.query.get(item.product_id)
+        item = CartDisplay(product.id, product.name, product.price, item.quantity, product.image)
+        products.append(item)
+    return render_template('/confirmation.html', title='Confirmation', order=order, products=products)
