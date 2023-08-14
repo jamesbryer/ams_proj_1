@@ -141,56 +141,52 @@ def clear_variable():
     return redirect(url_for('home'))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    form = AddressForm()
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    # if method is post
-    if request.method == 'POST':
-        # if form is valid
-        if form.validate_on_submit():
-            # check if address already exists
-            if Address.query.filter_by(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"]).first():
+    cart = Cart.query.filter_by(user_id=session['user_id']).first()
+    cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+    # if there are items in the cart
+    if cart_items:
+        form = AddressForm()
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
+        # if method is post
+        if request.method == 'POST':
+            # if form is valid
+            if form.validate_on_submit():
+                # check if address already exists
+                if not Address.query.filter_by(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"]).first():
+                    address = Address(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"], town_city=request.form["town_city"], postcode=request.form["postcode"])
+                    db.session.add(address)
+                    db.session.commit()
                 address = Address.query.filter_by(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"]).first()
-            else:
-                address = Address(user_id=session['user_id'], house_name_num=request.form["house_name_num"], street=request.form["street"], town_city=request.form["town_city"], postcode=request.form["postcode"])
-            cart = Cart.query.filter_by(user_id=session['user_id']).first()
-            db.session.add(cart)
-            db.session.commit()
-            cart.delivery_address_id = address.id
-            db.session.add(address)
-            db.session.commit()
-            return redirect(url_for('complete_order'))
+                # cart = Cart.query.filter_by(user_id=session['user_id']).first()
+                db.session.add(cart)
+                db.session.commit()
+                cart.delivery_address_id = address.id
+                db.session.add(address)
+                db.session.commit()
+                return redirect(url_for('complete_order'))
+    else:
+        return redirect(url_for('home'))
         
 
     cart = Cart.query.filter_by(user_id=session['user_id']).first()
     cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+    cart_products = []
+    for item in cart_items:
+        product = Product.query.get(item.product_id)
+        item = CartDisplay(product.id, product.name, product.price, item.quantity, product.image)
+        cart_products.append(item)
     addresses = Address.query.filter_by(user_id=session['user_id']).all()
-    return render_template('/checkout.html', title='Checkout', addresses=addresses, cart_items=cart_items, form=form)
+    return render_template('/checkout.html', title='Checkout', addresses=addresses, products=cart_products, form=form)
 
 @app.route('/complete-order', methods=['GET', 'POST'])
 def complete_order():
-    if 'user_id' in session:
+    cart = Cart.query.filter_by(user_id=session['user_id']).first()
+    cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+    # if there are items in the cart and user is logged in
+    if 'user_id' in session and cart_items:
         # if form has been submitted
         if request.method == 'POST':
             print('post')
@@ -207,10 +203,10 @@ def complete_order():
             db.session.add(payment_details)
             db.session.commit()
             # create order
-            cart = Cart.query.filter_by(user_id=session['user_id']).first()
+            # cart = Cart.query.filter_by(user_id=session['user_id']).first()
             payment_details_id = PaymentDetails.query.filter_by(user_id=session['user_id'], card_number=request.form['card_number']).first().id
-            cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
-            order = Orders(user_id=session['user_id'], date=datetime.now(), payment_details_id=payment_details_id)
+            # cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+            order = Orders(user_id=session['user_id'], date=datetime.now(), payment_details_id=payment_details_id, delivery_address_id=cart.delivery_address_id)
             db.session.add(order)
             db.session.commit()
             # get the order id from the order just created
@@ -226,13 +222,17 @@ def complete_order():
             return redirect(url_for('home'))
         
 
-        # find users cart
-        cart = Cart.query.filter_by(user_id=session['user_id']).first()
-        cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+        # # find users cart
+        # cart = Cart.query.filter_by(user_id=session['user_id']).first()
+        # cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
+
+        # if method isn't post - load page
         cart_products = []
-        # search payment_details table for user_id
+        # search payment_details table for user_id - sent to form for autofill option
         payment_details = PaymentDetails.query.filter_by(user_id=session['user_id']).all()
+        # create from
         payment_form = PaymentForm()
+        # create list of Cart Display objects to pass to template - combines product and cart item
         for item in cart_items:
             product = Product.query.get(item.product_id)
             item = CartDisplay(product.id, product.name, product.price, item.quantity, product.image)
@@ -241,4 +241,4 @@ def complete_order():
     
     
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('home'))

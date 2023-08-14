@@ -3,6 +3,7 @@
 {% block content %}
 
 <table class="table">
+    {% if products %}
     <thead>
         <tr>
             <th>Product</th>
@@ -43,6 +44,9 @@
     </tfoot>
 </table>
 <a href="/checkout"><button class="btn btn-primary">Checkout</button></a>
+{% else %}
+<h3>Cart is empty</h3>
+{% endif %}
 <script>
     // if there is an item in the form
     if (document.querySelector('.update-form')) {
@@ -72,7 +76,7 @@
         });
         total_amount.innerText = `£ ${total}`;
     }
-    
+
 </script>
 
 {% endblock %}

@@ -1,6 +1,37 @@
 {% extends 'navbar.html' %}
 
 {% block content %}
+<h2>Order Summary</h2>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <table class="table table-bordered rounded custom-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in products %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>£ {{ item.price }}</td>
+                        <td id="product_total">£ {{ item.price * item.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right"><b>Cart Total</b></td>
+                        <td><b id="total_amount"></b></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
 {% if addresses %}
 <form class="form-inline" style="padding-bottom: 10px;">
     <div class="form-group">
