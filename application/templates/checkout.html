@@ -10,6 +10,7 @@
                     <tr>
                         <th>Product</th>
                         <th>Price</th>
+                        <th>Quantity</th>
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -18,6 +19,7 @@
                     <tr>
                         <td>{{ item.name }}</td>
                         <td>£ {{ item.price }}</td>
+                        <td>{{ item.quantity }}</td>
                         <td id="product_total">£ {{ item.price * item.quantity }}</td>
                     </tr>
                     {% endfor %}
@@ -72,7 +74,7 @@
     </div>
 </div>
 <script>
-    let dropDown = document.querySelector('#category');
+        let dropDown = document.querySelector('#category');
     // if there is a dropdown
     if (dropDown) {
         // add event listener to dropdown on change
@@ -92,6 +94,14 @@
 
         });
     }
+    let total_amount = document.querySelector('#total_amount');
+        let total = 0;
+        let prices = document.querySelectorAll('#product_total');
+        prices.forEach(price => {
+            total += parseInt(price.innerText.split('£ ')[1]);
+        });
+        total_amount.innerText = `£ ${total}`;
+
 </script>
 
 {% endblock %}
