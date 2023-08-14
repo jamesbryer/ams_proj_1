@@ -5,3 +5,4 @@ flask-testing
 pytest
 pytest-cov
 flask-bcrypt
+pymysql

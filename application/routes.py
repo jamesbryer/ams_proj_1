@@ -180,7 +180,7 @@ def checkout():
             cart.delivery_address_id = address.id
             db.session.add(address)
             db.session.commit()
-            return redirect(url_for('home'))
+            return redirect(url_for('complete_order'))
         
 
     cart = Cart.query.filter_by(user_id=session['user_id']).first()
