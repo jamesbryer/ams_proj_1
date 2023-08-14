@@ -76,8 +76,10 @@ class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    PaymentDetails = db.relationship('PaymentDetails', backref='order', lazy=True)
+    payment_details = db.relationship('PaymentDetails', backref='order', lazy=True)
     payment_details_id = db.Column(db.Integer, db.ForeignKey('payment_details.id'), nullable=False)
+    address = db.relationship('Address', backref='order', lazy=True)
+    delivery_address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=False)
 
     def __repr__(self):
         return ''.join([
