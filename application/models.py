@@ -149,6 +149,6 @@ class CheckPostcode:
     
     def __call__(self, form, field):
         # Regex for UK postcode
-        regex = r"^[A-Za-z]{1,2}\d{1,2}\s?\d[A-Za-z]{2}$"
+        regex = r"^[A-Za-z]{1,2}\d{1,2} ?\d[A-Za-z]{2}$|^[A-Za-z]{1,2}\d{1,2} ?\d{1,2}[A-Za-z]{2}$"
         if not re.match(regex, field.data):
             raise ValidationError(self.message)
