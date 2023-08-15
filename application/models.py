@@ -9,11 +9,7 @@ class Category(db.Model):
     name = db.Column(db.String(30), nullable=False)
     products = db.relationship('Product', backref='category', lazy=True)
 
-    def __repr__(self):
-        return ''.join([
-            'Category ID: ', str(self.id), '\r\n',
-            'Name: ', self.name
-        ])
+
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,11 +20,6 @@ class Product(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)
 
 
-    def __repr__(self):
-        return ''.join([
-            'Product ID: ', str(self.id), '\r\n',
-            'Name: ', self.name, '\r\n', self.description
-        ])
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,11 +29,6 @@ class User(db.Model):
     phone = db.Column(db.String(15), nullable=False)
     orders = db.relationship('Orders', backref='customer', lazy=True)
 
-    def __repr__(self):
-        return ''.join([
-            'User ID: ', str(self.id), '\r\n',
-            'Email: ', self.email, '\r\n', self.name
-        ])
     
 class PaymentDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,11 +38,6 @@ class PaymentDetails(db.Model):
     cvv = db.Column(db.String(3), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __repr__(self):
-        return ''.join([
-            'PaymentDetails ID: ', str(self.id), '\r\n',
-            'User ID: ', str(self.user_id), '\r\n', str(self.card_number)
-        ])
     
 class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -67,11 +48,6 @@ class Address(db.Model):
     user = db.relationship('User', backref='address', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __repr__(self):
-        return ''.join([
-            'Address ID: ', str(self.id), '\r\n',
-            'User ID: ', str(self.user_id), '\r\n', str(self.address)
-        ])
 
 class Orders(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -82,11 +58,6 @@ class Orders(db.Model):
     address = db.relationship('Address', backref='order', lazy=True)
     delivery_address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=False)
 
-    def __repr__(self):
-        return ''.join([
-            'Order ID: ', str(self.id), '\r\n',
-            'User ID: ', str(self.user_id), '\r\n', str(self.date)
-        ])
     
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -95,23 +66,12 @@ class OrderItem(db.Model):
     order = db.relationship('Orders', backref='order', lazy=True)
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
 
-    def __repr__(self):
-        return ''.join([
-            'OrderItem ID: ', str(self.id), '\r\n',
-            'Order ID: ', str(self.order_id), '\r\n', str(self.quantity)
-        ])
-
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     delivery_address_id = db.Column(db.Integer, db.ForeignKey('address.id'), nullable=True)
     address = db.relationship('Address', backref='card', foreign_keys=[delivery_address_id])
 
-    def __repr__(self):
-        return ''.join([
-            'Cart ID: ', str(self.id), '\r\n',
-            'Product ID: ', str(self.product_id)
-        ])
     
     def set_quantity(self, product_id, quantity):
         cart_item = CartItem.query.filter_by(product_id=product_id, cart_id=self.id).first()
@@ -152,11 +112,6 @@ class CartItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'), nullable=False)
 
-    def __repr__(self):
-        return ''.join([
-            'CartItem ID: ', str(self.id), '\r\n',
-            'Cart ID: ', str(self.cart_id), '\r\n', str(self.quantity)
-        ])
     
 class CartDisplay():
     def __init__(self, product_id, name, price, quantity, image) -> None:
@@ -184,6 +139,7 @@ class BannedChars:
         banned_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')']
         for char in banned_chars:
             if char in field.data:
+                self.message = "Invalid character in username."
                 raise ValidationError(self.message)
 
 class CheckPostcode:
@@ -195,6 +151,4 @@ class CheckPostcode:
         # Regex for UK postcode
         regex = r"^[A-Za-z]{1,2}\d{1,2}\s?\d[A-Za-z]{2}$"
         if not re.match(regex, field.data):
-            if self.message is None:
-                self.message = "Invalid UK postcode format."
             raise ValidationError(self.message)
