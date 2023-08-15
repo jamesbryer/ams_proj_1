@@ -1,5 +1,44 @@
 {% extends 'navbar.html' %}
 
 {% block content %}
+<br><br><br>
+<div class="text-center">
+    <h3>Address:</h3>
+    <p>QA Shop</p>
+    <p>International House</p>
+    <p>24 Holborn Viaduct</p>
+    <p>London</p>
+    <p>EC1A 2BN</p>
+    <h3>Phone:</h3>
+    <p>020 7654 5000</p>
+</div>
+
+<br>
+{% if message%}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endif %}
+
+
+<div class="">
+    <h3>Email:</h3>
+    <form action="" class="form" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.message.label(class="form-label") }}
+            {{ form.message(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+</div>
 
 {% endblock %}
