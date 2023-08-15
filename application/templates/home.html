@@ -3,6 +3,11 @@
 {% block content %}
 <h2>Welcome to the QA Store!</h2>
 <br>
+{% if message %}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endif %}
 <p>Here you can browse our products, add them to your basket and checkout.</p>
 {% if not session['user_id'] %}
 <p><a href="/login">Login</a> or <a href="/signup">sign up</a> to get started.</p>
