@@ -57,7 +57,7 @@ with app.app_context():
     
     user_jasmine = User(name='Jasmine', password=bcrypt.generate_password_hash('password'), email="jasmine@qa.com", phone="01234567890")
     
-    user_john = User(name='John', password=bcrypt.generate_password_hash('password'), email="john@qa.com'", phone="01234567890")
+    user_john = User(name='John', password=bcrypt.generate_password_hash('password'), email="john@qa.com", phone="01234567890")
     
     db.session.add(user_james)
     db.session.add(user_jasmine)
