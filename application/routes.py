@@ -88,23 +88,18 @@ def empty_cart():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            print('validated')
-            user = User(
-                name = form.name.data,
-                email = form.email.data,
-                password = bcrypt.generate_password_hash(form.password.data),
-                address = form.address.data,
-                postcode = form.postcode.data,
-                phone = form.phone.data)
-
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('home'))
-        else:
-            print('not validated')
+    if request.method == 'POST' and form.validate_on_submit():
+        print('validated')
+        user = User(
+            name=form.name.data,
+            email=form.email.data,
+            password=bcrypt.generate_password_hash(form.password.data),
+            phone=form.phone.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('home'))
     return render_template('/signup.html', title='Sign Up', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -151,7 +146,7 @@ def checkout():
         if 'user_id' not in session:
             return redirect(url_for('login'))
         # if method is post
-        if request.method == 'POST':
+        if request.method == 'POST' and form.validate_on_submit():
             # if form is valid
             if form.validate_on_submit():
                 # check if address already exists
@@ -255,3 +250,31 @@ def confirmation(order_id):
         item = CartDisplay(product.id, product.name, product.price, item.quantity, product.image)
         products.append(item)
     return render_template('/confirmation.html', title='Confirmation', order=order, products=products)
+
+@app.route('/my-orders')
+def my_orders():
+    # if user is logged in
+    if 'user_id' in session:
+        # Query the database using JOIN to get orders and related product details
+        user_orders_with_products = db.session.query(Orders, OrderItem, Product)\
+        .join(OrderItem, Orders.id == OrderItem.order_id)\
+        .join(Product, OrderItem.product_id == Product.id)\
+        .filter(Orders.user_id == session['user_id'])\
+        .all()
+
+        # Process the data to group orders and products
+        user_orders_data = {}
+        for order, order_item, product in user_orders_with_products:
+            if order.id not in user_orders_data:
+                user_orders_data[order.id] = {
+                    'order': order,
+                    'products': []
+                }
+            user_orders_data[order.id]['products'].append({
+                'product': product,
+                'quantity': order_item.quantity
+            })
+
+        return render_template('my-orders.html', title="My Orders", user_orders_data=user_orders_data)
+    else:
+        return redirect(url_for('home'))
