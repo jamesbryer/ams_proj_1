@@ -10,6 +10,11 @@
                         {{ form.name.label(class="form-label") }}
                         {{ form.name(class="form-control") }}
                     </div>
+                    <div class="error">
+                        {% for error in form.name.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
                     <div class="mb-3">
                         {{ form.email.label(class="form-label") }}
                         {{ form.email(class="form-control") }}
