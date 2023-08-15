@@ -26,7 +26,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2" class="text-right"><b>Cart Total</b></td>
+                        <td colspan="3" class="text-right"><b>Cart Total</b></td>
                         <td><b id="total_amount"></b></td>
                     </tr>
                 </tfoot>
@@ -67,6 +67,11 @@
                 <div class="mb-3">
                     {{ form.postcode.label(class="form-label") }}
                     {{ form.postcode(class="form-control") }}
+                </div>
+                <div class="error">
+                    {% for error in form.postcode.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
                 </div>
                 <button type="submit" class="btn btn-primary">Next: Payment</button>
             </form>
