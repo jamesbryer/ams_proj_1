@@ -1,0 +1,38 @@
+{% extends 'navbar.html' %}
+
+{% block content %}
+{% if user_orders_data %}
+<div class="container">
+    <p>Orders for User ID: {{ session['user_id'] }}</p>
+    {% for order_id, data in user_orders_data.items() %}
+    <div class="order">
+        <h2>Order #{{ data.order.id }}</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th class="col-md-4">Product</th>
+                        <th class="col-md-4">Price</th>
+                        <th class="col-md-4">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product_data in data.products %}
+                    <tr>
+                        <td><a href="/product/{{ product_data.product.id }}">{{ product_data.product.name }}</a></td>
+                        <td>£{{ product_data.product.price }}</td>
+                        <td>{{ product_data.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="container">
+    <p>You have no orders.</p>
+</div>
+{% endif %}
+{% endblock %}
