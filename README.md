@@ -21,33 +21,37 @@ python3 app.py
 
 ### 1. Pages
 
-- [x] Home page
-- [x] About page
-- [x] Category page
-- [x] Products page
-- [x] Orders page where you can see all orders filtered by user id
+#### The MVP (minimum viable product) describes the requirement for these pages
+
+- Home page
+- About page
+- Category page
+- Products page
+- Orders page where you can see all orders filtered by user id
 
 ### 2. User Stories
 
-- [x] As a user, I can see a list of products with their image, price, and description on the products page
-- [x] As a user, I can click on a product to see more information about it
-- [x] As a user, I can see products separated by category
-- [x] As a user, I can see a description of the system on the home page
-- [x] As a user, I can add products to a cart
-- [x] As a user, I can see the products in my cart
-- [x] As a user, I can remove products from my cart
-- [x] As a user, I can see the total price of the products in my cart
-- [x] As a user, I can navigate between pages easily
+#### Using the MVP as my guide, I devised the following user stories
+
+- As a user, I can see a list of products with their image, price, and description on the products page
+- As a user, I can click on a product to see more information about it
+- As a user, I can see products separated by category
+- As a user, I can see a description of the system on the home page
+- As a user, I can add products to a cart
+- As a user, I can see the products in my cart
+- As a user, I can remove products from my cart
+- As a user, I can see the total price of the products in my cart
+- As a user, I can navigate between pages easily
 
 ### 3. Minimum Viable Product
 
-- [x] A kanban board detailing the tasks for the project
-- [x] A git repository
-- [x] A home page
-- [x] An about page
-- [x] A products page
-- [x] A category page
-- [x] A cart page
-- [x] A checkout page
+- A kanban board detailing the tasks for the project
+- A git repository
+- A home page
+- An about page
+- A products page
+- A category page
+- A cart page
+- A checkout page
 
 ### 4. Acceptance Criteria
