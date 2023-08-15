@@ -1,7 +1,8 @@
+
 from flask import render_template, request, redirect, url_for, session
 from application import app, db
 from application.models import Product, Category, User, Orders, OrderItem, Cart, CartItem, CartDisplay, PaymentDetails, Address
-from application.forms import SignUpForm, LoginForm, PaymentForm, AddressForm
+from application.forms import SignUpForm, LoginForm, PaymentForm, AddressForm, ContactForm
 from flask_bcrypt import Bcrypt
 from application import bcrypt
 from datetime import datetime
@@ -26,10 +27,10 @@ def product(id):
 
 @app.route('/about', methods=['GET', 'POST'])
 def about():
-    return render_template('about.html', title='About')
+    return render_template('about_us.html', title='About Us')
 
 @app.route('/category', methods=['GET', 'POST'])
-def contact():
+def category():
     categories = Category.query.all()
     products = Product.query.all()
     return render_template('category.html', title='Categories', categories=categories, products=products)
@@ -181,12 +182,18 @@ def complete_order():
 
     # find users cart
     cart = Cart.query.filter_by(user_id=session['user_id']).first()
+    # check whether there is an address in the cart
+
     cart_items = CartItem.query.filter_by(cart_id=cart.id).all()
 
-    # if there are items in the cart and user is logged in - else redirect to home
-    if 'user_id' in session and cart_items:
+    # if there are items in the cart and user is logged in AND there is a delivery 
+    # address attached to cart (if no address, user has manually typed the url in 
+    # the address bar and an order could be placed with no delivery address)
+    #  - else redirect to home
+    if 'user_id' in session and cart_items and cart.delivery_address_id:
+        payment_form = PaymentForm()
         # if form has been submitted
-        if request.method == 'POST':
+        if request.method == 'POST' and payment_form.validate_on_submit():
             print('post')
             # check if payment details already exist
             if PaymentDetails.query.filter_by(user_id=session['user_id'], card_number=request.form['card_number']).first():
@@ -216,7 +223,9 @@ def complete_order():
             for item in cart_items:
                 order_item = OrderItem(order_id=order.id, product_id=item.product_id, quantity=item.quantity)
                 db.session.add(order_item)
-
+            # remove items from cart and set delivery address to null
+            cart.delivery_address_id = None
+            db.session.add(cart)
             db.session.commit()
             cart.empty_cart()
             # get the order id from the database
@@ -229,7 +238,7 @@ def complete_order():
         # search payment_details table for user_id - sent to form for autofill option
         payment_details = PaymentDetails.query.filter_by(user_id=session['user_id']).all()
         # create from
-        payment_form = PaymentForm()
+       
         # create list of Cart Display objects to pass to template - combines product and cart item
         for item in cart_items:
             product = Product.query.get(item.product_id)
@@ -278,3 +287,12 @@ def my_orders():
         return render_template('my-orders.html', title="My Orders", user_orders_data=user_orders_data)
     else:
         return redirect(url_for('home'))
+    
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        return render_template('contact_us.html', title="Contact Us", form=form, message="Thanks for getting in touch!")
+    return render_template('contact_us.html', title="Contact Us", form=form)
+
