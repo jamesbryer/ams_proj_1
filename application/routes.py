@@ -1,5 +1,6 @@
 
 from flask import render_template, request, redirect, url_for, session
+from sqlalchemy import desc
 from application import app, db
 from application.models import Product, Category, User, Orders, OrderItem, Cart, CartItem, CartDisplay, PaymentDetails, Address
 from application.forms import SignUpForm, LoginForm, PaymentForm, AddressForm, ContactForm
@@ -105,6 +106,7 @@ def signup():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    message = ''
     if request.method == 'POST':
         print('post')
         if form.validate_on_submit():
@@ -123,12 +125,13 @@ def login():
                     cart = Cart(user_id=user.id)
                     db.session.add(cart)
                     db.session.commit()
-                return redirect(url_for('home'))
+                return render_template('home.html', title='Home', message="Login Successful!")
             else:
                 print('user not found')
+                message = 'Login Unsuccessful. Please check email and password'
         else:
             print('not validated')
-    return render_template('/login.html', title='Login', form=form)
+    return render_template('/login.html', title='Login', form=form, message=message)
 
 @app.route('/logout')
 def clear_variable():
@@ -229,7 +232,7 @@ def complete_order():
             db.session.commit()
             cart.empty_cart()
             # get the order id from the database
-            order_id = Orders.query.filter_by(user_id=session['user_id'], payment_details_id=payment_details_id).first().id
+            order_id = Orders.query.filter_by(user_id=session['user_id'], payment_details_id=payment_details_id).order_by(desc(Orders.id)).first().id
             return redirect("/confirmation/" + str(order_id))
         
 
