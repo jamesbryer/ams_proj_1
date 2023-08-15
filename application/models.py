@@ -1,3 +1,4 @@
+import re
 from application import db
 from wtforms.validators import ValidationError
 from datetime import datetime
@@ -184,5 +185,16 @@ class BannedChars:
         for char in banned_chars:
             if char in field.data:
                 raise ValidationError(self.message)
-            
 
+class CheckPostcode:
+
+    def __init__(self, message=None) -> None:
+        self.message = message
+    
+    def __call__(self, form, field):
+        # Regex for UK postcode
+        regex = r"^[A-Za-z]{1,2}\d{1,2}\s?\d[A-Za-z]{2}$"
+        if not re.match(regex, field.data):
+            if self.message is None:
+                self.message = "Invalid UK postcode format."
+            raise ValidationError(self.message)
