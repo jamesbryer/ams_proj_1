@@ -44,8 +44,16 @@
     </tfoot>
 </table>
 <a href="/checkout"><button class="btn btn-primary">Checkout</button></a>
-{% else %}
-<h3>Cart is empty</h3>
+<!-- else - cart is empty -->
+{% else %} 
+<div class="container mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2>Your cart is empty!</h2>
+            <p class="lead">Add an item to your cart to see it here.</p>
+        </div>
+    </div>
+</div>
 {% endif %}
 <script>
     // if there is an item in the form
