@@ -13,9 +13,29 @@
 <p><a href="/login">Login</a> or <a href="/signup">sign up</a> to get started.</p>
 {% endif %}
 
-<img src="{{ url_for('static', filename='images/iphone_12_pro.jpg') }}" alt="iPhone 12 Pro" width="200" height="200">
-<img src="{{ url_for('static', filename='images/google_pixel_5.jpg') }}" alt="Google Pixel 5" width="200" height="200">
-<img src="{{ url_for('static', filename='images/macbook_pro.jpg') }}" alt="MacBook Pro" width="200" height="200">
-<img src="{{ url_for('static', filename='images/tcl_6series_qled_tv.jpg') }}" alt="TCL 6 Series TV" width="200" height="200">
+<div class="container mt-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class="col">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/iphone_12_pro.jpg') }}" class="card-img-top" alt="iPhone 12 Pro">
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/google_pixel_5.jpg') }}" class="card-img-top" alt="Google Pixel 5">
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/macbook_pro.jpg') }}" class="card-img-top" alt="MacBook Pro">
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/huawei_p40_pro.jpg') }}" class="card-img-top" alt="Dell XPS 13 laptop">
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
