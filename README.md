@@ -84,13 +84,59 @@ python3 app.py
 - The confirmation page should have a link to the order history page
 - The order history page should show a list of orders with a description of the order
 
-### 4. Database Design
+### 4. Risk Assessment
+
+| Risk Category          | Risk Description                                        | Likelihood | Impact | Mitigation Strategies                                  |
+|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
+| Technical Risks        |                                                         |            |        |                                                        |
+|                        | Integration Complexity                                  | Medium     | High   | - Conduct technical proof of concept                   |
+|                        |                                                         |            |        | - Ensure compatibility and data synchronization        |
+|                        |                                                         |            |        |                                                        |
+|                        | Database Performance                                    | Low        | High   | - Implement database optimization techniques           |
+|                        |                                                         |            |        | - Monitor and tune database performance                |
+|                        |                                                         |            |        |                                                        |
+|                        | Continuous Integration                                  | Medium     | High   | - Implement proper Jenkins build and deployment        |
+|                        |                                                         |            |        |   automation                                           |
+|                        |                                                         |            |        | - Regularly test Jenkins configurations                |
+|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
+| Project Management     |                                                         |            |        |                                                        |
+| Risks                  | Scope Creep                                             | High       | High   | - Clearly define and manage user stories               |
+|                        |                                                         |            |        | - Regularly review and adjust sprint goals             |
+|                        |                                                         |            |        |                                                        |
+|                        | Resource Availability                                   | Low        | High   | - Cross-train team members                             |
+|                        |                                                         |            |        | - Maintain documentation to ensure knowledge           |
+|                        |                                                         |            |        |   transferability                                      |
+|                        |                                                         |            |        |                                                        |
+|                        | Sprint Planning                                         | Medium     | High   | - Accurate estimation of user stories                  |
+|                        |                                                         |            |        | - Frequent retrospectives for process improvement      |
+|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
+| Security Risks         |                                                         |            |        |                                                        |
+|                        | Data Security                                           | Medium     | High   | - Implement encryption, secure authentication,         |
+|                        |                                                         |            |        |   and access controls                                  |
+|                        |                                                         |            |        | - Regularly audit and monitor database security        |
+|                        |                                                         |            |        |                                                        |
+|                        | Web Application Security                                | High       | High   | - Implement input validation and sanitize user         |
+|                        |                                                         |            |        |   inputs                                               |
+|                        |                                                         |            |        | - Regularly conduct security assessments               |
+|                        |                                                         |            |        |                                                        |
+|                        | Integration Security                                    | Medium     | High   | - Secure communication protocols and endpoints         |
+|                        |                                                         |            |        | - Use strong authentication mechanisms                 |
+|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
+| Performance Risks      |                                                         |            |        |                                                        |
+|                        | Scalability                                             | Medium     | High   | - Implement load balancers and caching mechanisms      |
+|                        |                                                         |            |        | - Utilize asynchronous processing for scalability      |
+|                        |                                                         |            |        |                                                        |
+|                        | Database Bottlenecks                                    | Medium     | High   | - Optimize database queries and indexes                |
+|                        |                                                         |            |        | - Regularly monitor and tune database performance      |
+|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
+
+### 5. Database Design
 
 #### I devised the following database design, using the principals of relational databases and normalisation
 
 ![Database Design](/application/static/images/database_design.png)
 
-### 5. Development Methodology
+### 6. Development Methodology
 
 #### Scrum
 
