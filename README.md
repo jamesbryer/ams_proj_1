@@ -95,7 +95,6 @@ python3 app.py
 |                        | Continuous Integration                                  | Medium     | High   | - Implement proper Jenkins build and deployment        |
 |                        |                                                         |            |        |   automation                                           |
 |                        |                                                         |            |        | - Regularly test Jenkins configurations                |
-|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
 | Project Management     |                                                         |            |        |                                                        |
 | Risks                  | Scope Creep                                             | High       | High   | - Clearly define and manage user stories               |
 |                        |                                                         |            |        | - Regularly review and adjust sprint goals             |
@@ -103,7 +102,6 @@ python3 app.py
 |                        |                                                         |            |        | - Maintain documentation to ensure knowledge           |
 |                        |                                                         |            |        |   transferability                                      |
 |                        | Sprint Planning                                         | Medium     | High   | - Accurate estimation of user stories                  |
-|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
 | Security Risks         |                                                         |            |        |                                                        |
 |                        | Data Security                                           | Medium     | High   | - Implement encryption on passwords                    |
 |                        | Web Application Security                                | High       | High   | - Implement input validation                           |
