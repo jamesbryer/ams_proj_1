@@ -8,5 +8,10 @@
 
 .custom-table {
     border: 1px solid #000000;
-    border-radius: 10px; /* Adjust the radius value as needed */
+    border-radius: 10px;
 }
+
+/* p {
+    
+    color: red;
+} */
