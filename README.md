@@ -105,7 +105,6 @@ python3 app.py
 | Security Risks         |                                                         |            |        |                                                        |
 |                        | Data Security                                           | Medium     | High   | - Implement encryption on passwords                    |
 |                        | Web Application Security                                | High       | High   | - Implement input validation                           |
-|------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
 
 ### 5. Database Design
 
