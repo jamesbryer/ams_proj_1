@@ -91,10 +91,7 @@ python3 app.py
 | Technical Risks        |                                                         |            |        |                                                        |
 |                        | Integration Complexity                                  | Medium     | High   | - Conduct technical proof of concept                   |
 |                        |                                                         |            |        | - Ensure compatibility and data synchronization        |
-|                        |                                                         |            |        |                                                        |
 |                        | Database Performance                                    | Low        | High   | - Ensure database is normalised                        |
-|                        |                                                         |            |        |                                                        |
-|                        |                                                         |            |        |                                                        |
 |                        | Continuous Integration                                  | Medium     | High   | - Implement proper Jenkins build and deployment        |
 |                        |                                                         |            |        |   automation                                           |
 |                        |                                                         |            |        | - Regularly test Jenkins configurations                |
@@ -102,20 +99,14 @@ python3 app.py
 | Project Management     |                                                         |            |        |                                                        |
 | Risks                  | Scope Creep                                             | High       | High   | - Clearly define and manage user stories               |
 |                        |                                                         |            |        | - Regularly review and adjust sprint goals             |
-|                        |                                                         |            |        |                                                        |
 |                        | Resource Availability                                   | Low        | High   |                                                        |
 |                        |                                                         |            |        | - Maintain documentation to ensure knowledge           |
 |                        |                                                         |            |        |   transferability                                      |
-|                        |                                                         |            |        |                                                        |
 |                        | Sprint Planning                                         | Medium     | High   | - Accurate estimation of user stories                  |
-|                        |                                                         |            |        |                                                        |
 |------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
 | Security Risks         |                                                         |            |        |                                                        |
 |                        | Data Security                                           | Medium     | High   | - Implement encryption on passwords                    |
-|                        |                                                         |            |        |                                                        |
-|                        |                                                         |            |        |                                                        |
 |                        | Web Application Security                                | High       | High   | - Implement input validation                           |
-|                        |                                                         |            |        |                                                        |
 |------------------------|---------------------------------------------------------|------------|--------|--------------------------------------------------------|
 
 ### 5. Database Design
