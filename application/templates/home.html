@@ -12,4 +12,10 @@
 {% if not session['user_id'] %}
 <p><a href="/login">Login</a> or <a href="/signup">sign up</a> to get started.</p>
 {% endif %}
+
+<img src="{{ url_for('static', filename='images/iphone_12_pro.jpg') }}" alt="iPhone 12 Pro" width="200" height="200">
+<img src="{{ url_for('static', filename='images/google_pixel_5.jpg') }}" alt="Google Pixel 5" width="200" height="200">
+<img src="{{ url_for('static', filename='images/macbook_pro.jpg') }}" alt="MacBook Pro" width="200" height="200">
+<img src="{{ url_for('static', filename='images/tcl_6series_qled_tv.jpg') }}" alt="TCL 6 Series TV" width="200" height="200">
+
 {% endblock %}
