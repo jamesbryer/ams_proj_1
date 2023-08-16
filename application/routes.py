@@ -26,9 +26,9 @@ def product(id):
     category = Category.query.get(product.category_id)
     return render_template('product.html', title='Product', product=product, category=category)
 
-@app.route('/about', methods=['GET', 'POST'])
+@app.route('/about')
 def about():
-    return render_template('about_us.html', title='About Us')
+    return render_template('about.html', title='About Us')
 
 @app.route('/category', methods=['GET', 'POST'])
 def category():
