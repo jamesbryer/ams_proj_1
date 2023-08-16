@@ -19,7 +19,7 @@ python3 app.py
 
 ## Project Requirements
 
-### 1. Pages
+### 1. Content
 
 #### 1.1 The MVP (minimum viable product) describes the requirement for these pages
 
@@ -135,7 +135,7 @@ During the second sprint, I continued the project by completing the checkout sys
 
 #### Test Coverage
 
-Using Pytest and coverage I was able to pass all my tests and achieve a test coverage of 95%.
+Using Pytest and coverage I was able to pass all my tests and achieve a test coverage of 95%. All CRUD functionality has been tested and test results can be found in the images below.
 
 ![Test Coverage](/application/static/images/test_coverage.png)
 ![Test Passing](/application/static/images/test_pass.png)
